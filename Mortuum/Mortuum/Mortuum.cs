@@ -19,6 +19,8 @@ namespace Mortuum
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        Player player;
+
         float FPStime;
         int FPS;
 
@@ -67,7 +69,8 @@ namespace Mortuum
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            player = new Player();
+            player.Init( Content, graphics );
         }
 
         /// <summary>

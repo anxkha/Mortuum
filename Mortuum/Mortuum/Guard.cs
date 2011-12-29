@@ -8,6 +8,7 @@ namespace Mortuum
     class Guard
     {
         private int level;
+        private int health;
 
         public int Level
         {
@@ -19,6 +20,19 @@ namespace Mortuum
             set
             {
                 level = value;
+            }
+        }
+
+        public int Health
+        {
+            get
+            {
+                return health;
+            }
+
+            set
+            {
+                health = value;
             }
         }
     }

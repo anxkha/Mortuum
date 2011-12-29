@@ -2,25 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Mortuum
 {
-    enum Spells
-    {
-        DragonBreath = 1,
-        Lightning,
-        Apocalypse,
-        Gate
-    }
-
-    enum Weapons
-    {
-        Sword = 1,
-        Mace,
-        Axe,
-        Hammer
-    }
-
     class Player
     {
         private int health;
@@ -32,16 +19,19 @@ namespace Mortuum
         private int magic;
         private int maxMagic;
 
-        private int points;
+        private int score;
 
-        private Spells activeSpell;
-        private Weapons activeWeapon;
+        private Spell.SpellType activeSpell;
+        private Weapon.WeaponType activeWeapon;
 
         private bool maceAvailable;
         private bool axeAvailable;
 
         private bool dying;     // Whether or not to play the dying animation.
         private int dyingTimer; // In seconds.
+
+        private Vector3 position;
+        private Vector3 direction;
 
         public Player()
         {
@@ -50,21 +40,57 @@ namespace Mortuum
             maxShield = shield = 5;
             maxMagic = magic = 20;
 
-            points = 0;
+            score = 0;
 
-            activeSpell = Spells.DragonBreath;
-            activeWeapon = Weapons.Sword;
+            activeSpell = Spell.SpellType.DragonBreath;
+            activeWeapon = Weapon.WeaponType.Sword;
 
             maceAvailable = false;
             axeAvailable = false;
             
             dying = false;
             dyingTimer = 5;
+
+            position = Vector3.Zero;
+            direction = Vector3.Zero;
         }
 
-        public bool Init()
+        public void Init(ContentManager content, GraphicsDeviceManager graphics)
         {
-            return true;
+        }
+
+        public void Update(float elapsedTime)
+        {
+        }
+
+        public void Draw()
+        {
+        }
+
+        public Vector3 Position
+        {
+            get
+            {
+                return position;
+            }
+
+            set
+            {
+                position = value;
+            }
+        }
+
+        public Vector3 Direction
+        {
+            get
+            {
+                return direction;
+            }
+
+            set
+            {
+                direction = value;
+            }
         }
 
         public int Health
@@ -116,6 +142,19 @@ namespace Mortuum
             set
             {
                 magic = value;
+            }
+        }
+
+        public int Score
+        {
+            get
+            {
+                return score;
+            }
+
+            set
+            {
+                score = value;
             }
         }
     }
