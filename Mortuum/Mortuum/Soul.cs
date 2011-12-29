@@ -8,19 +8,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mortuum
 {
-    class Archer
+    class Soul
     {
         public const int Score = 50;
-
-        private int level;
-        private int health;
+        public const int Magic = 13;
 
         private Vector3 position;
         private Vector3 direction;
 
-        private bool dead;
-
-        public Archer()
+        public Soul()
         {
             position = Vector3.Zero;
             direction = Vector3.Zero;
@@ -30,39 +26,7 @@ namespace Mortuum
         {
         }
 
-        public int Level
-        {
-            get
-            {
-                return level;
-            }
-
-            set
-            {
-                level = value;
-            }
-        }
-
-        public int Health
-        {
-            get
-            {
-                return health;
-            }
-
-            set
-            {
-                health = value;
-
-                if (health <= 0)
-                {
-                    health = 0;
-                    dead = true;
-                }
-            }
-        }
-
-                public Vector3 Position
+        public Vector3 Position
         {
             get
             {
@@ -85,14 +49,6 @@ namespace Mortuum
             set
             {
                 direction = value;
-            }
-        }
-
-        public bool Dead
-        {
-            get
-            {
-                return dead;
             }
         }
     }

@@ -10,14 +10,15 @@ namespace Mortuum
 {
     class Player
     {
+        public const int MaxHealth = 5;
+        public const int MaxShield = 3;
+        public const int MaxMagic = 156;
+        public const int MaxStrength = 10;
+
         private int health;
-        private int maxHealth;
         private int strength;
-        private int maxStrength;
         private int shield;
-        private int maxShield;
         private int magic;
-        private int maxMagic;
 
         private int score;
 
@@ -27,18 +28,26 @@ namespace Mortuum
         private bool maceAvailable;
         private bool axeAvailable;
 
-        private bool dying;     // Whether or not to play the dying animation.
-        private int dyingTimer; // In seconds.
+        private bool dying;         // Whether or not to play the dying animation.
+        private bool dead;
+        private float dyingTick;    // In seconds.
+        private const float dyingDuration = 6.0f;
+
+        private float healthTick;
+        private const float healthRegenDuration = 6.0f;
+
+        private float shieldTick;
+        private const float shieldRegenDuration = 3.0f;
 
         private Vector3 position;
         private Vector3 direction;
 
         public Player()
         {
-            maxHealth = health = 10;
-            maxStrength = strength = 10;
-            maxShield = shield = 5;
-            maxMagic = magic = 20;
+            health = MaxHealth;
+            strength = MaxStrength;
+            shield = MaxShield;
+            magic = MaxMagic;
 
             score = 0;
 
@@ -49,18 +58,71 @@ namespace Mortuum
             axeAvailable = false;
             
             dying = false;
-            dyingTimer = 5;
+            dead = false;
+            dyingTick = 0.0f;
 
             position = Vector3.Zero;
             direction = Vector3.Zero;
+
+            healthTick = 0.0f;
+            shieldTick = 0.0f;
         }
 
         public void Init(ContentManager content, GraphicsDeviceManager graphics)
         {
         }
 
+        public void Damage(int amount)
+        {
+            if (shield < amount)
+            {
+                amount -= shield;
+                Shield = 0;
+
+                Health -= amount;
+            }
+            else
+            {
+                Health -= amount;
+            }
+        }
+
         public void Update(float elapsedTime)
         {
+            if (dying)
+            {
+                dyingTick += elapsedTime;
+
+                if (dyingTick >= dyingDuration)
+                {
+                    dead = true;
+                }
+            }
+            else
+            {
+                if (health < MaxHealth)
+                {
+                    healthTick += elapsedTime;
+
+                    if (healthTick >= healthRegenDuration)
+                    {
+                        health++;
+                        Magic -= Soul.Magic;
+                        healthTick -= healthRegenDuration;
+                    }
+                }
+
+                if (shield < MaxShield)
+                {
+                    shieldTick += elapsedTime;
+
+                    if (shieldTick >= shieldRegenDuration)
+                    {
+                        shield++;
+                        shieldTick -= shieldRegenDuration;
+                    }
+                }
+            }
         }
 
         public void Draw()
@@ -103,6 +165,12 @@ namespace Mortuum
             set
             {
                 health = value;
+
+                if (health <= 0)
+                {
+                    dying = true;
+                    health = 0;
+                }
             }
         }
 
@@ -142,6 +210,8 @@ namespace Mortuum
             set
             {
                 magic = value;
+
+                if (magic < 0) magic = 0;
             }
         }
 
@@ -155,6 +225,14 @@ namespace Mortuum
             set
             {
                 score = value;
+            }
+        }
+
+        public bool Dead
+        {
+            get
+            {
+                return dead;
             }
         }
     }

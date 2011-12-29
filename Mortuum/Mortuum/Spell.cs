@@ -19,10 +19,10 @@ namespace Mortuum
         }
 
         // Spell magic costs in magic points.
-        public static const int DragonBreathCost = 10;
-        public static const int LightningCost = 10;
-        public static const int ApocalypseCost = 10;
-        public static const int GateCost = 10;
+        public static const int DragonBreathCost = 1;
+        public static const int LightningCost = 3;
+        public static const int ApocalypseCost = 52;
+        public static const int GateCost = 117;
 
         // Spell durations in seconds.
         public static const float DragonBreathDuration = 1.0f;
@@ -91,6 +91,7 @@ namespace Mortuum
         public void Update(float elapsedTime)
         {
             if (!initialized) return;
+            if (finished) return;
 
             tick += elapsedTime;
 
@@ -113,6 +114,12 @@ namespace Mortuum
                     }
                     else
                     {
+                        if (trigger)
+                        {
+                            gateOpened = false;
+                            trigger = false;
+                            finished = true;
+                        }
                     }
                     break;
             }
@@ -121,6 +128,7 @@ namespace Mortuum
         public void Draw()
         {
             if (!initialized) return;
+            if (finished) return;
         }
 
         public Vector3 Position
