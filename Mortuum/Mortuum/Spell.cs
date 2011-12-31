@@ -25,8 +25,8 @@ namespace Mortuum
         public static const int GateCost = 117;
 
         // Spell durations in seconds.
-        public static const float DragonBreathDuration = 1.0f;
-        public static const float LightningDuration = 0.0f;
+        public static const float DragonBreathDuration = 2.0f;
+        public static const float LightningDuration = 5.0f;
         public static const float ApocalypseDuration = 0.0f;
         public static const float GateDuration = 10.0f;
 
@@ -93,6 +93,7 @@ namespace Mortuum
             if (!initialized) return;
             if (finished) return;
 
+            // Advance the basic tick timer and trigger if we hit the general duration.
             tick += elapsedTime;
 
             if (tick >= duration)
