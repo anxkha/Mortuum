@@ -10,11 +10,6 @@ namespace Mortuum
 {
     class Player
     {
-        public const int MaxHealth = 5;
-        public const int MaxShield = 3;
-        public const int MaxMagic = 156;
-        public const int MaxStrength = 10;
-
         private int health;
         private int strength;
         private int shield;
@@ -22,8 +17,8 @@ namespace Mortuum
 
         private int score;
 
-        private Spell.SpellType activeSpell;
-        private Weapon.WeaponType activeWeapon;
+        private SpellType activeSpell;
+        private WeaponType activeWeapon;
 
         private bool maceAvailable;
         private bool axeAvailable;
@@ -31,28 +26,25 @@ namespace Mortuum
         private bool dying;         // Whether or not to play the dying animation.
         private bool dead;
         private float dyingTick;    // In seconds.
-        private const float dyingDuration = 6.0f;
 
         private float healthTick;
-        private const float healthRegenDuration = 6.0f;
 
         private float shieldTick;
-        private const float shieldRegenDuration = 3.0f;
 
         private Vector3 position;
         private Vector3 direction;
 
         public Player()
         {
-            health = MaxHealth;
-            strength = MaxStrength;
-            shield = MaxShield;
-            magic = MaxMagic;
+            health = Settings.PlayerMaxHealth;
+            strength = Settings.PlayerMaxStrength;
+            shield = Settings.PlayerMaxShield;
+            magic = Settings.PlayerMaxMagic;
 
             score = 0;
 
-            activeSpell = Spell.SpellType.DragonBreath;
-            activeWeapon = Weapon.WeaponType.Sword;
+            activeSpell = SpellType.DragonBreath;
+            activeWeapon = WeaponType.Sword;
 
             maceAvailable = false;
             axeAvailable = false;
@@ -93,33 +85,33 @@ namespace Mortuum
             {
                 dyingTick += elapsedTime;
 
-                if (dyingTick >= dyingDuration)
+                if (dyingTick >= Settings.PlayerDyingDuration)
                 {
                     dead = true;
                 }
             }
             else
             {
-                if (health < MaxHealth)
+                if (health < Settings.PlayerMaxHealth)
                 {
                     healthTick += elapsedTime;
 
-                    if (healthTick >= healthRegenDuration)
+                    if (healthTick >= Settings.PlayerHealthRegenDuration)
                     {
                         health++;
                         Magic -= Soul.Magic;
-                        healthTick -= healthRegenDuration;
+                        healthTick -= Settings.PlayerHealthRegenDuration;
                     }
                 }
 
-                if (shield < MaxShield)
+                if (shield < Settings.PlayerMaxShield)
                 {
                     shieldTick += elapsedTime;
 
-                    if (shieldTick >= shieldRegenDuration)
+                    if (shieldTick >= Settings.PlayerShieldRegenDuration)
                     {
                         shield++;
-                        shieldTick -= shieldRegenDuration;
+                        shieldTick -= Settings.PlayerShieldRegenDuration;
                     }
                 }
             }

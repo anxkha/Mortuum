@@ -8,16 +8,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mortuum
 {
+    public enum WeaponType
+    {
+        Sword = 1,
+        Mace,
+        Axe,
+        Hammer
+    }
+
     class Weapon
     {
-        public static enum WeaponType
-        {
-            Sword = 1,
-            Mace,
-            Axe,
-            Hammer
-        }
-
         private Vector3 position;
         private Vector3 direction;
 

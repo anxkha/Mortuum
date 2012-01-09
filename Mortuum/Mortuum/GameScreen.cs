@@ -9,10 +9,21 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Mortuum
 {
-    class TitleScreen : State
+    class GameScreen : State
     {
+        private int currentLevel;
+
         public override bool Load(ContentManager content, GraphicsDeviceManager graphics, Player player)
         {
+            return Load(content, graphics, player, 0);
+        }
+
+        public bool Load(ContentManager content, GraphicsDeviceManager graphics, Player player, int level)
+        {
+            if ((level < Settings.MinLevels) || (level > Settings.MaxLevels))
+                return false;
+
+            currentLevel = level;
             firstFrame = true;
 
             this.player = player;
@@ -31,17 +42,17 @@ namespace Mortuum
             if (firstFrame)
             {
                 firstFrame = false;
-                return GameState.TitleScreen;
+                return GameState.GameScreen;
             }
 
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                return GameState.Exit;
+                return GameState.TitleScreen;
 
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-                return GameState.Exit;
+                return GameState.TitleScreen;
 
-            return GameState.TitleScreen;
+            return GameState.GameScreen;
         }
 
         public override void Draw()

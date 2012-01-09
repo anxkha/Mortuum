@@ -10,7 +10,6 @@ namespace Mortuum
 {
     class Soul
     {
-        public const int Score = 50;
         public const int Magic = 13;
 
         private Vector3 position;

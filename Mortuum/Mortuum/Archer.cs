@@ -10,8 +10,6 @@ namespace Mortuum
 {
     class Archer
     {
-        public const int Score = 50;
-
         private int level;
         private int health;
 

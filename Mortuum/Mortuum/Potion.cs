@@ -8,15 +8,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mortuum
 {
+    public enum PotionType
+    {
+        Strength = 1,
+        Shield,
+        SunHammer
+    }
+
     class Potion
     {
-        public enum PotionType
-        {
-            Strength = 1,
-            Shield,
-            SunHammer
-        }
-
         private PotionType type;
 
         private Vector3 position;

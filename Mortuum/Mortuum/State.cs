@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Mortuum
 {
@@ -10,21 +13,20 @@ namespace Mortuum
         TitleScreen = 1,
         WinScreen,
         LoseScreen,
-        Level1,
-        Level2,
-        Level3,
-        Level4,
-        Level5,
-        Level6,
-        Level7,
-        Level8,
-        Level9,
-        Level10
+        GameScreen,
+        Exit
     };
 
     class State
     {
-        public virtual bool Load()
+        protected Player player;
+
+        protected bool firstFrame;
+
+        protected ContentManager content;
+        protected GraphicsDeviceManager graphics;
+
+        public virtual bool Load(ContentManager content, GraphicsDeviceManager graphics, Player player)
         {
             return false;
         }

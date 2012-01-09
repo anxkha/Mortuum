@@ -8,34 +8,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mortuum
 {
+    public enum SpellType
+    {
+        DragonBreath = 1,
+        Lightning,
+        Apocalypse,
+        Gate
+    }
+
     class Spell
     {
-        public static enum SpellType
-        {
-            DragonBreath = 1,
-            Lightning,
-            Apocalypse,
-            Gate
-        }
-
-        // Spell magic costs in magic points.
-        public static const int DragonBreathCost = 1;
-        public static const int LightningCost = 3;
-        public static const int ApocalypseCost = 52;
-        public static const int GateCost = 117;
-
-        // Spell durations in seconds.
-        public static const float DragonBreathDuration = 2.0f;
-        public static const float LightningDuration = 5.0f;
-        public static const float ApocalypseDuration = 0.0f;
-        public static const float GateDuration = 10.0f;
-
-        // Spell damage amounts in health points.
-        public static const int DragonBreathDamage = 5;
-        public static const int LightningDamage = 10;
-        public static const int ApocalypseDamage = 100;
-        public static const int GateDamage = 0;
-
         private SpellType type;
 
         private Vector3 position;
@@ -75,12 +57,12 @@ namespace Mortuum
             switch (type)
             {
                 case SpellType.DragonBreath:
-                    if (duration != DragonBreathDuration) return;
+                    if (duration != Settings.DragonBreathDuration) return;
                     break;
 
                 case SpellType.Gate:
                     if (0.0f == acceleration) return;
-                    if (duration != GateDuration) return;
+                    if (duration != Settings.GateDuration) return;
                     if (direction == Vector3.Zero) return;
                     break;
             }

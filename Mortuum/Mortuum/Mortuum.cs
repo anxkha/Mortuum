@@ -20,6 +20,11 @@ namespace Mortuum
         SpriteBatch spriteBatch;
 
         Player player;
+        GameScreen gameScreen;
+        TitleScreen titleScreen;
+        GameState currentGameState;
+        GameState lastGameState;
+        GameState nextGameState;
 
         float FPStime;
         int FPS;
@@ -38,16 +43,16 @@ namespace Mortuum
         /// </summary>
         protected override void Initialize()
         {
-            graphics.PreferredBackBufferWidth = 1024;
-            graphics.PreferredBackBufferHeight = 768;
-            graphics.PreferredBackBufferFormat = SurfaceFormat.Bgra5551;
-            graphics.IsFullScreen = false;
+            graphics.PreferredBackBufferWidth = Settings.GraphicsWidth;
+            graphics.PreferredBackBufferHeight = Settings.GraphicsHeight;
+            graphics.PreferredBackBufferFormat = Settings.GraphicsFormat;
+            graphics.IsFullScreen = Settings.GraphicsFullScreen;
             graphics.PreferredDepthStencilFormat = DepthFormat.Depth24;
-            graphics.SynchronizeWithVerticalRetrace = false;
+            graphics.SynchronizeWithVerticalRetrace = Settings.SyncWithVTrace;
             graphics.ApplyChanges();
 
-            this.Window.Title = "Mortuum";
-            this.IsFixedTimeStep = false;
+            this.Window.Title = Settings.GameTitle;
+            this.IsFixedTimeStep = Settings.FixedTimeStep;
 
             Camera.Resize(90.0f, graphics.GraphicsDevice.Viewport.AspectRatio, 0.0001f, 100.0f);
 
@@ -70,7 +75,17 @@ namespace Mortuum
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             player = new Player();
-            player.Init( Content, graphics );
+            player.Init(Content, graphics);
+
+            titleScreen = new TitleScreen();
+            titleScreen.Load(Content, graphics, player);
+
+            gameScreen = new GameScreen();
+            gameScreen.Load(Content, graphics, player);
+
+            currentGameState = GameState.TitleScreen;
+            lastGameState = GameState.TitleScreen;
+            nextGameState = GameState.TitleScreen;
         }
 
         /// <summary>
@@ -92,9 +107,25 @@ namespace Mortuum
         {
             float elapsedTime = (float)(gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
 
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+            if (nextGameState != currentGameState)
+            {
+                if (GameState.Exit == nextGameState)
+                    this.Exit();
+
+                lastGameState = currentGameState;
+                currentGameState = nextGameState;
+            }
+            
+            switch(currentGameState)
+            {
+                case GameState.TitleScreen:
+                    nextGameState = titleScreen.Update(elapsedTime);
+                    break;
+
+                case GameState.GameScreen:
+                    nextGameState = gameScreen.Update(elapsedTime);
+                    break;
+            }
 
             base.Update(gameTime);
         }
@@ -115,6 +146,17 @@ namespace Mortuum
             {
                 FPStime -= 1.0f;
                 FPS = 0;
+            }
+
+            switch (currentGameState)
+            {
+                case GameState.TitleScreen:
+                    titleScreen.Draw();
+                    break;
+
+                case GameState.GameScreen:
+                    gameScreen.Draw();
+                    break;
             }
 
             base.Draw(gameTime);

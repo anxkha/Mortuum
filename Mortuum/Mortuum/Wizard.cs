@@ -16,6 +16,8 @@ namespace Mortuum
         private Vector3 position;
         private Vector3 direction;
 
+        private bool dead;
+
         public Wizard()
         {
             position = Vector3.Zero;
@@ -84,5 +86,12 @@ namespace Mortuum
             }
         }
 
+        public bool Dead
+        {
+            get
+            {
+                return dead;
+            }
+        }
     }
 }

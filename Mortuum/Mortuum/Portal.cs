@@ -8,18 +8,18 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Mortuum
 {
+    public enum PortalOrientation
+    {
+        Left = 1,
+        Right,
+        Top,
+        Bottom
+    }
+
     class Portal
     {
-        public static enum Orientation
-        {
-            Left = 1,
-            Right,
-            Top,
-            Bottom
-        };
-
         private Vector3 position;
-        private Orientation side;
+        private PortalOrientation side;
 
         private float spawnTime;
         private float spawnTick;
@@ -32,7 +32,7 @@ namespace Mortuum
             trigger = false;
 
             position = Vector3.Zero;
-            side = Orientation.Left;
+            side = PortalOrientation.Left;
         }
 
         public void Init(ContentManager content, GraphicsDeviceManager graphics)
@@ -67,7 +67,7 @@ namespace Mortuum
             }
         }
 
-        public Orientation Side
+        public PortalOrientation Side
         {
             get
             {
