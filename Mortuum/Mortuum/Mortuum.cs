@@ -22,6 +22,7 @@ namespace Mortuum
         Player player;
         GameScreen gameScreen;
         TitleScreen titleScreen;
+
         GameState currentGameState;
         GameState lastGameState;
         GameState nextGameState;
@@ -86,6 +87,8 @@ namespace Mortuum
             currentGameState = GameState.TitleScreen;
             lastGameState = GameState.TitleScreen;
             nextGameState = GameState.TitleScreen;
+
+
         }
 
         /// <summary>

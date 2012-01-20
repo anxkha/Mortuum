@@ -112,6 +112,7 @@
     <Compile Include="Debug.cs" />
     <Compile Include="GameScreen.cs" />
     <Compile Include="Guard.cs" />
+    <Compile Include="Level.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Portal.cs" />
     <Compile Include="Potion.cs" />

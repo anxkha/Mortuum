@@ -31,6 +31,11 @@ namespace Mortuum
         public const int MaxLevels = 10;
         public const string GameTitle = "Mortuum";
 
+        // Level size settings.
+        public const int TileRows = 8;
+        public const int TileColumns = 10;
+        public const float LevelHeight = 0.5f;
+
         // Player values.
         public const int PlayerMaxHealth = 5;
         public const int PlayerMaxShield = 3;
@@ -43,8 +48,8 @@ namespace Mortuum
         // Graphics values.
         public const bool SyncWithVTrace = false;
         public const bool FixedTimeStep = false;
-        public const int GraphicsWidth = 1024;
-        public const int GraphicsHeight = 768;
+        public const int GraphicsWidth = 1440;
+        public const int GraphicsHeight = 900;
         public const bool GraphicsFullScreen = false;
         public const SurfaceFormat GraphicsFormat = SurfaceFormat.Bgra5551;
 

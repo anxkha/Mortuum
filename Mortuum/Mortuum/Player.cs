@@ -16,6 +16,7 @@ namespace Mortuum
         private int magic;
 
         private int score;
+        private int kills;
 
         private SpellType activeSpell;
         private WeaponType activeWeapon;
@@ -42,6 +43,7 @@ namespace Mortuum
             magic = Settings.PlayerMaxMagic;
 
             score = 0;
+            kills = 0;
 
             activeSpell = SpellType.DragonBreath;
             activeWeapon = WeaponType.Sword;
@@ -217,6 +219,19 @@ namespace Mortuum
             set
             {
                 score = value;
+            }
+        }
+
+        public int Kills
+        {
+            get
+            {
+                return kills;
+            }
+
+            set
+            {
+                kills = value;
             }
         }
 
