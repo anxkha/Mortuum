@@ -12,6 +12,7 @@ namespace Mortuum
     class TitleScreen : State
     {
         Level level;
+        Weapon weapon;
 
         public override bool Load(ContentManager content, GraphicsDeviceManager graphics, Player player)
         {
@@ -22,13 +23,21 @@ namespace Mortuum
             this.graphics = graphics;
 
             level = new Level();
-            level.Load("", content, graphics);
+            level.Load(1, content, graphics);
+
+            weapon = new Weapon() { Type = WeaponType.Sword, Position = new Vector3(0.0f, 4.0f, 1.0f) };
+            weapon.Init(content, graphics);
 
             return true;
         }
 
         public override void Unload()
         {
+            weapon.Unload();
+            level.Unload();
+
+            weapon = null;
+            level = null;
         }
 
         public override GameState Update(float elapsedTime)
@@ -53,13 +62,15 @@ namespace Mortuum
 
         public override void Draw()
         {
-            DepthStencilState state = new DepthStencilState();
-            state.DepthBufferEnable = true;
-            graphics.GraphicsDevice.DepthStencilState = state;
+            var state = new DepthStencilState();
 
-            //graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+            state.DepthBufferEnable = true;
+
+            graphics.GraphicsDevice.DepthStencilState = state;
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
 
             level.Draw(Camera.View, Camera.Projection);
+            weapon.Draw(Camera.View, Camera.Projection);
         }
     }
 }

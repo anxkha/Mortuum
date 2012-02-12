@@ -26,7 +26,84 @@
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
       <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\levelfx.xnb</Output>
-      <Time>2012-01-19T21:34:16.8636407-08:00</Time>
+      <Time>2012-02-09T20:16:55.9083916-08:00</Time>
+    </Item>
+    <Item>
+      <Source>floor_1.jpg</Source>
+      <Name>floor_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\floor_1.xnb</Output>
+      <Time>2012-01-22T10:50:02.1041652-08:00</Time>
+    </Item>
+    <Item>
+      <Source>wall_1.jpg</Source>
+      <Name>wall_1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\wall_1.xnb</Output>
+      <Time>2012-01-22T10:50:02.1151683-08:00</Time>
+    </Item>
+    <Item>
+      <Source>floor_2.jpg</Source>
+      <Name>floor_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\floor_2.xnb</Output>
+      <Time>2012-01-22T10:50:43.3595459-08:00</Time>
+    </Item>
+    <Item>
+      <Source>wall_2.jpg</Source>
+      <Name>wall_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\wall_2.xnb</Output>
+      <Time>2012-01-22T10:50:43.377546-08:00</Time>
+    </Item>
+    <Item>
+      <Source>sword.x</Source>
+      <Name>sword</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\sword.xnb</Output>
+      <Time>2012-01-28T23:28:33.051909-08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\sword_0.xml</Key>
+        <Value>2012-01-28T23:37:41.0383842-08:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>sword.x</Source>
+      <Importer>XImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\sword_0.xml</Output>
+      <Time>2012-01-28T23:28:33.051909-08:00</Time>
+    </Item>
+    <Item>
+      <Source>non_textured.fx</Source>
+      <Name>non_textured</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\non_textured.xnb</Output>
+      <Time>2012-02-09T19:46:34.1500076-08:00</Time>
+    </Item>
+    <Item>
+      <Source>power_circle.png</Source>
+      <Name>power_circle</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Parameters>
+        <Data Key="ColorKeyColor">255, 255, 255, 255</Data>
+      </Parameters>
+      <Options>None</Options>
+      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\power_circle.xnb</Output>
+      <Time>2012-01-22T10:56:43.5495566-08:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

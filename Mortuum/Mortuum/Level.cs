@@ -13,18 +13,14 @@ namespace Mortuum
         protected VertexDeclaration vertexDecl;
         protected VertexBuffer vBuffer;
 
-        protected BasicEffect effect;
         protected ContentManager content;
         protected GraphicsDeviceManager graphics;
 
         protected Texture2D wallTexture;
         protected Texture2D floorTexture;
+        protected Texture2D powerCircleTexture;
 
-        protected Effect levelEffect;
-
-        protected Vector4[] LightColors;
-        protected float[] LightPowers;
-        protected Vector3[] LightPositions;
+        protected BasicEffect levelEffect;
 
         protected bool loaded;
         protected int numVertices;
@@ -35,7 +31,7 @@ namespace Mortuum
             loaded = false;
         }
 
-        public bool Load(string level, ContentManager content, GraphicsDeviceManager graphics)
+        public bool Load(int level, ContentManager content, GraphicsDeviceManager graphics)
         {
             int r = Settings.TileRows;
             int c = Settings.TileColumns;
@@ -55,8 +51,8 @@ namespace Mortuum
                 new VertexElement(24, VertexElementFormat.Vector2, VertexElementUsage.TextureCoordinate, 0)
             });
 
-            vBuffer = new VertexBuffer(graphics.GraphicsDevice, vertexDecl, numVertices, BufferUsage.None);
-            VertexPositionNormalTexture[] vertices = new VertexPositionNormalTexture[numVertices];
+            vBuffer = new VertexBuffer(graphics.GraphicsDevice, vertexDecl, numVertices + 6, BufferUsage.None);
+            VertexPositionNormalTexture[] vertices = new VertexPositionNormalTexture[numVertices + 6];
 
             // Top of wall, upper
             k = (r / 2) + 1;
@@ -178,58 +174,54 @@ namespace Mortuum
                 }
             }
 
+            // Power circle.
+
+            vertices[j++] = new VertexPositionNormalTexture(new Vector3(0.5f, 0.0f, 0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(0.0f, 0.0f));
+            vertices[j++] = new VertexPositionNormalTexture(new Vector3(-0.5f, 0.0f, 0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(1.0f, 0.0f));
+            vertices[j++] = new VertexPositionNormalTexture(new Vector3(0.5f, 0.0f, -0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(0.0f, 1.0f));
+            vertices[j++] = new VertexPositionNormalTexture(new Vector3(0.5f, 0.0f, -0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(0.0f, 1.0f));
+            vertices[j++] = new VertexPositionNormalTexture(new Vector3(-0.5f, 0.0f, 0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(1.0f, 0.0f));
+            vertices[j++] = new VertexPositionNormalTexture(new Vector3(-0.5f, 0.0f, -0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(1.0f, 1.0f));
+
             vBuffer.SetData<VertexPositionNormalTexture>(vertices);
 
             // Load textures.
-            wallTexture = content.Load<Texture2D>("wall_5");
-            floorTexture = content.Load<Texture2D>("floor_5");
+            wallTexture = content.Load<Texture2D>("wall_" + level);
+            floorTexture = content.Load<Texture2D>("floor_" + level);
+            powerCircleTexture = content.Load<Texture2D>("power_circle");
 
             // Load effect.
-            levelEffect = content.Load<Effect>("levelfx");
+            levelEffect = new BasicEffect(graphics.GraphicsDevice);
 
-            LightColors = new Vector4[]
-            {
-                new Vector4(1.0f, 0.941176f, 0.607843f, 1.0f),
-                new Vector4(1.0f, 0.941176f, 0.607843f, 1.0f),
-                new Vector4(1.0f, 0.941176f, 0.607843f, 1.0f),
-                new Vector4(1.0f, 0.941176f, 0.607843f, 1.0f)
-            };
-
-            LightPowers = new float[]
-            {
-                1.0f,
-                1.0f,
-                1.0f,
-                1.0f
-            };
-
-            LightPositions = new Vector3[]
-            {
-                new Vector3(5.0f, 1.1f, 4.0f),
-                new Vector3(-5.0f, 1.1f, 4.0f),
-                new Vector3(5.0f, 1.1f, -4.0f),
-                new Vector3(-5.0f, 1.1f, -4.0f)
-            };
-
-            levelEffect.Parameters["LightPos"].SetValue(LightPositions);
-            levelEffect.Parameters["LightPower"].SetValue(LightPowers);
-            levelEffect.Parameters["LightColor"].SetValue(LightColors);
+            levelEffect.PreferPerPixelLighting = true;
+            levelEffect.EnableDefaultLighting();
+            levelEffect.Alpha = 1.0f;
+            levelEffect.DirectionalLight2.SpecularColor = new Vector3(0.0f, 0.0f, 0.0f);
+            levelEffect.DirectionalLight0.SpecularColor = new Vector3(0.0f, 0.0f, 0.0f);
 
             loaded = true;
 
             return true;
         }
 
+        public void Unload()
+        {
+            vBuffer.Dispose();
+            levelEffect.Dispose();
+            wallTexture.Dispose();
+            floorTexture.Dispose();
+            powerCircleTexture.Dispose();
+        }
+
         public void Draw(Matrix view, Matrix projection)
         {
             if (!loaded) return;
 
-            levelEffect.CurrentTechnique = levelEffect.Techniques["Torches"];
-
-            levelEffect.Parameters["View"].SetValue(view);
-            levelEffect.Parameters["Projection"].SetValue(projection);
-            levelEffect.Parameters["World"].SetValue(Matrix.Identity);
-            levelEffect.Parameters["xTexture"].SetValue(wallTexture);
+            levelEffect.TextureEnabled = true;
+            levelEffect.Texture = wallTexture;
+            levelEffect.View = view;
+            levelEffect.Projection = projection;
+            levelEffect.World = Matrix.Identity;
 
             graphics.GraphicsDevice.SetVertexBuffer(vBuffer);
 
@@ -240,7 +232,7 @@ namespace Mortuum
                 graphics.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, 0, (floorVerticesStart / 3));
             }
 
-            levelEffect.Parameters["xTexture"].SetValue(floorTexture);
+            levelEffect.Texture = floorTexture;
 
             foreach (EffectPass pass in levelEffect.CurrentTechnique.Passes)
             {
@@ -248,6 +240,19 @@ namespace Mortuum
 
                 graphics.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, floorVerticesStart, ((numVertices - floorVerticesStart) / 3));
             }
+
+            levelEffect.Texture = powerCircleTexture;
+
+            graphics.GraphicsDevice.BlendState = BlendState.AlphaBlend;
+
+            foreach (EffectPass pass in levelEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+
+                graphics.GraphicsDevice.DrawPrimitives(PrimitiveType.TriangleList, numVertices, 2);
+            }
+
+            graphics.GraphicsDevice.BlendState = BlendState.Opaque;
         }
     }
 }

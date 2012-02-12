@@ -97,6 +97,8 @@ namespace Mortuum
         /// </summary>
         protected override void UnloadContent()
         {
+            titleScreen.Unload();
+
             Debug.Write("Mortuum stopping.");
             Debug.Stop();
         }

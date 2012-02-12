@@ -4,16 +4,16 @@ float4x4 Projection;
 
 #define NUMLIGHTS 4
 
-Texture2D xTexture;
+texture Texture;
 float3 LightPos[NUMLIGHTS];
 float LightPower[NUMLIGHTS];
 float4 LightColor[NUMLIGHTS];
 
-SamplerState TextureSampler
+sampler2D TextureSampler = sampler_state
 {
+	Texture = (Texture);
 	magfilter = LINEAR;
 	minfilter = LINEAR;
-	mipfilter = LINEAR;
 	AddressU = mirror;
 	AddressV = mirror;
 };
@@ -57,7 +57,10 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 		intensity += LightPower[i] * saturate(Intensity(LightPos[i], input.Position3D, input.Normal)) * LightColor[i];
 	}
 
-	output = xTexture.Sample(TextureSampler, input.TexCoords) * saturate(intensity);
+	float4 texel = tex2D(TextureSampler, input.TexCoords);
+
+	output = texel * saturate(intensity);
+	output.a = texel.a;
 
     return output;
 }
@@ -66,6 +69,12 @@ technique Torches
 {
     pass Pass1
     {
+		ZENABLE = TRUE;
+		ZWRITEENABLE = TRUE;
+		CULLMODE = CCW;
+		AlphaBlendEnable = TRUE;
+        DestBlend = INVSRCALPHA;
+        SrcBlend = SRCALPHA;
         VertexShader = compile vs_2_0 VertexShaderFunction();
         PixelShader = compile ps_2_0 PixelShaderFunction();
     }
