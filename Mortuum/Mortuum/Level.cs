@@ -225,6 +225,11 @@ namespace Mortuum
 
             graphics.GraphicsDevice.SetVertexBuffer(vBuffer);
 
+            var clampState = new SamplerState() { AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp };
+            var oldState = graphics.GraphicsDevice.SamplerStates[0];
+
+            graphics.GraphicsDevice.SamplerStates[0] = clampState;
+
             foreach (EffectPass pass in levelEffect.CurrentTechnique.Passes)
             {
                 pass.Apply();
@@ -253,6 +258,7 @@ namespace Mortuum
             }
 
             graphics.GraphicsDevice.BlendState = BlendState.Opaque;
+            graphics.GraphicsDevice.SamplerStates[0] = oldState;
         }
     }
 }

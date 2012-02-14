@@ -20,15 +20,6 @@
       <Time>2012-01-19T11:07:21.3622561-08:00</Time>
     </Item>
     <Item>
-      <Source>levelfx.fx</Source>
-      <Name>levelfx</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\levelfx.xnb</Output>
-      <Time>2012-02-09T20:16:55.9083916-08:00</Time>
-    </Item>
-    <Item>
       <Source>floor_1.jpg</Source>
       <Name>floor_1</Name>
       <Importer>TextureImporter</Importer>
@@ -65,35 +56,6 @@
       <Time>2012-01-22T10:50:43.377546-08:00</Time>
     </Item>
     <Item>
-      <Source>sword.x</Source>
-      <Name>sword</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\sword.xnb</Output>
-      <Time>2012-01-28T23:28:33.051909-08:00</Time>
-      <Dependency>
-        <Key>obj\x86\Debug\sword_0.xml</Key>
-        <Value>2012-01-28T23:37:41.0383842-08:00</Value>
-      </Dependency>
-    </Item>
-    <Item>
-      <Source>sword.x</Source>
-      <Importer>XImporter</Importer>
-      <Options>IntermediateFile, DontCacheImportedData</Options>
-      <Output>obj\x86\Debug\sword_0.xml</Output>
-      <Time>2012-01-28T23:28:33.051909-08:00</Time>
-    </Item>
-    <Item>
-      <Source>non_textured.fx</Source>
-      <Name>non_textured</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-      <Options>None</Options>
-      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\non_textured.xnb</Output>
-      <Time>2012-02-09T19:46:34.1500076-08:00</Time>
-    </Item>
-    <Item>
       <Source>power_circle.png</Source>
       <Name>power_circle</Name>
       <Importer>TextureImporter</Importer>
@@ -105,10 +67,48 @@
       <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\power_circle.xnb</Output>
       <Time>2012-01-22T10:56:43.5495566-08:00</Time>
     </Item>
+    <Item>
+      <Source>levelfx.fx</Source>
+      <Name>levelfx</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\levelfx.xnb</Output>
+      <Time>2012-02-09T20:16:55.9083916-08:00</Time>
+    </Item>
+    <Item>
+      <Source>sword.x</Source>
+      <Name>sword</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\sword.xnb</Output>
+      <Time>2012-01-28T23:28:33.051909-08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\sword_0.xml</Key>
+        <Value>2012-02-12T10:11:50.2319338-08:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>sword.x</Source>
+      <Importer>XImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\sword_0.xml</Output>
+      <Time>2012-01-28T23:28:33.051909-08:00</Time>
+    </Item>
+    <Item>
+      <Source>Verdana.spritefont</Source>
+      <Name>Verdana</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\Verdana.xnb</Output>
+      <Time>2012-02-12T20:41:55.9558785-08:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>
-      <TargetProfile>HiDef</TargetProfile>
+      <TargetProfile>Reach</TargetProfile>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
       <RootDirectory>E:\Backup\Lucas\Projects\Mortuum\Mortuum\MortuumContent\</RootDirectory>

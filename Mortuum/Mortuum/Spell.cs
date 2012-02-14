@@ -18,6 +18,11 @@ namespace Mortuum
 
     class Spell
     {
+        private ContentManager content;
+        private GraphicsDeviceManager graphics;
+
+        private Model model;
+
         private SpellType type;
 
         private Vector3 position;
@@ -25,7 +30,7 @@ namespace Mortuum
         private float acceleration; // Currently only useful for the Gate spell.
         private float duration;     // In seconds.
 
-        private bool initialized;
+        private bool loaded;
         private bool trigger;       // Triggered when the internal tick count reaches or exceeds the duration.
         private bool finished;      // Triggered when the spell has reached completion.
 
@@ -45,34 +50,59 @@ namespace Mortuum
 
             tick = 0.0f;
 
-            initialized = false;
+            loaded = false;
             trigger = false;
             finished = false;
         }
 
-        public void Init(ContentManager content, GraphicsDeviceManager graphics)
+        public void Load(ContentManager content, GraphicsDeviceManager graphics)
         {
             // This function requires attributes to have been set before being called.
+            this.content = content;
+            this.graphics = graphics;
 
             switch (type)
             {
                 case SpellType.DragonBreath:
                     if (duration != Settings.DragonBreathDuration) return;
+
+                    model = content.Load<Model>("dragonBreath");
+
+                    break;
+
+                case SpellType.Lightning:
+                    if (Vector3.Zero == direction) return;
+
+                    model = content.Load<Model>("lightning");
+
                     break;
 
                 case SpellType.Gate:
                     if (0.0f == acceleration) return;
                     if (duration != Settings.GateDuration) return;
                     if (direction == Vector3.Zero) return;
+
+                    model = content.Load<Model>("gate");
+
                     break;
             }
 
-            initialized = true;
+            // Tweak the effect settings of the model's effects.
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                foreach (BasicEffect effect in mesh.Effects)
+                {
+                    effect.EnableDefaultLighting();
+                    effect.PreferPerPixelLighting = true;
+                }
+            }
+
+            loaded = true;
         }
 
         public void Update(float elapsedTime)
         {
-            if (!initialized) return;
+            if (!loaded) return;
             if (finished) return;
 
             // Advance the basic tick timer and trigger if we hit the general duration.
@@ -108,10 +138,29 @@ namespace Mortuum
             }
         }
 
-        public void Draw()
+        public void Draw(Matrix view, Matrix projection)
         {
-            if (!initialized) return;
+            if (!loaded) return;
             if (finished) return;
+
+            var clampState = new SamplerState() { AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp };
+            var oldState = graphics.GraphicsDevice.SamplerStates[0];
+
+            graphics.GraphicsDevice.SamplerStates[0] = clampState;
+
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                foreach (BasicEffect e in mesh.Effects)
+                {
+                    e.View = view;
+                    e.Projection = projection;
+                    e.World = Matrix.CreateTranslation(Position);
+
+                    mesh.Draw();
+                }
+            }
+
+            graphics.GraphicsDevice.SamplerStates[0] = oldState;
         }
 
         public Vector3 Position

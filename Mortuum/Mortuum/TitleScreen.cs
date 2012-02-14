@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Mortuum.Ui;
 
 namespace Mortuum
 {
@@ -13,6 +10,9 @@ namespace Mortuum
     {
         Level level;
         Weapon weapon;
+
+        TextBox txtbox;
+        Canvas menuCanvas;
 
         public override bool Load(ContentManager content, GraphicsDeviceManager graphics, Player player)
         {
@@ -26,7 +26,23 @@ namespace Mortuum
             level.Load(1, content, graphics);
 
             weapon = new Weapon() { Type = WeaponType.Sword, Position = new Vector3(0.0f, 4.0f, 1.0f) };
-            weapon.Init(content, graphics);
+            weapon.Load(content, graphics);
+
+            menuCanvas = new Canvas();
+
+            menuCanvas.IsActive = true;
+            menuCanvas.Position = new Vector2(((graphics.GraphicsDevice.Viewport.Width / 2) - 200), ((graphics.GraphicsDevice.Viewport.Height / 2) - 250));
+            menuCanvas.Size = new Vector2(400, 500);
+            menuCanvas.Hidden = true;
+            menuCanvas.Load(content, graphics);
+
+            txtbox = new TextBox();
+            txtbox.Font = "Verdana";
+            txtbox.Text = "Hi!";
+            txtbox.Name = "txtHi";
+            txtbox.Load(content, graphics);
+
+            menuCanvas.AddChild(txtbox);
 
             return true;
         }
@@ -57,12 +73,18 @@ namespace Mortuum
 
             Camera.LookAt(new Vector3(0.0f, 5.0f, -0.1f), new Vector3(0.0f, 0.0f, 0.0f));
 
+            weapon.Update(elapsedTime);
+
+            menuCanvas.Update(elapsedTime);
+
             return GameState.TitleScreen;
         }
 
         public override void Draw()
         {
             var state = new DepthStencilState();
+
+            
 
             state.DepthBufferEnable = true;
 
@@ -71,6 +93,8 @@ namespace Mortuum
 
             level.Draw(Camera.View, Camera.Projection);
             weapon.Draw(Camera.View, Camera.Projection);
+
+            menuCanvas.Draw();
         }
     }
 }
