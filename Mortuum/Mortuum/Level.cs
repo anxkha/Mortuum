@@ -211,6 +211,14 @@ namespace Mortuum
             wallTexture.Dispose();
             floorTexture.Dispose();
             powerCircleTexture.Dispose();
+
+            vBuffer = null;
+            levelEffect = null;
+            wallTexture = null;
+            floorTexture = null;
+            powerCircleTexture = null;
+
+            loaded = false;
         }
 
         public void Draw(Matrix view, Matrix projection)

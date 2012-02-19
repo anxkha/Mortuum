@@ -10,6 +10,9 @@ namespace Mortuum
 {
     class Player
     {
+        private ContentManager content;
+        private GraphicsDeviceManager graphics;
+
         private int health;
         private int strength;
         private int shield;
@@ -27,13 +30,15 @@ namespace Mortuum
         private bool dying;         // Whether or not to play the dying animation.
         private bool dead;
         private float dyingTick;    // In seconds.
-
+        private bool loaded;
         private float healthTick;
-
         private float shieldTick;
 
         private Vector3 position;
         private Vector3 direction;
+
+        private Matrix rotation;
+        private Model model;
 
         public Player()
         {
@@ -54,16 +59,43 @@ namespace Mortuum
             dying = false;
             dead = false;
             dyingTick = 0.0f;
+            loaded = false;
 
             position = Vector3.Zero;
             direction = Vector3.Zero;
 
             healthTick = 0.0f;
             shieldTick = 0.0f;
+
+            WeaponPosition = 0.0f;
+
+            model = null;
+            rotation = Matrix.Identity;
         }
 
-        public void Init(ContentManager content, GraphicsDeviceManager graphics)
+        public void Load(ContentManager content, GraphicsDeviceManager graphics)
         {
+            this.content = content;
+            this.graphics = graphics;
+
+            model = content.Load<Model>("cruentus");
+
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                foreach (BasicEffect effect in mesh.Effects)
+                {
+                    effect.EnableDefaultLighting();
+                    effect.PreferPerPixelLighting = true;
+                }
+            }
+
+            loaded = true;
+        }
+
+        public void Unload()
+        {
+            model = null;
+            loaded = false;
         }
 
         public void Damage(int amount)
@@ -83,6 +115,8 @@ namespace Mortuum
 
         public void Update(float elapsedTime)
         {
+            if (!loaded) return;
+
             if (dying)
             {
                 dyingTick += elapsedTime;
@@ -117,10 +151,37 @@ namespace Mortuum
                     }
                 }
             }
+
+            rotation = Matrix.CreateRotationZ(MathHelper.ToRadians(Direction.Z));
+            rotation *= Matrix.CreateRotationY(MathHelper.ToRadians(Direction.Y));
+            rotation *= Matrix.CreateRotationX(MathHelper.ToRadians(Direction.X));
         }
 
-        public void Draw()
+        public void Draw(Matrix view, Matrix projection)
         {
+            if (!loaded) return;
+
+            Matrix[] transforms = new Matrix[model.Bones.Count];
+            model.CopyAbsoluteBoneTransformsTo(transforms);
+
+            var clampState = new SamplerState() { AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp };
+            var oldState = graphics.GraphicsDevice.SamplerStates[0];
+
+            graphics.GraphicsDevice.SamplerStates[0] = clampState;
+
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                foreach (BasicEffect e in mesh.Effects)
+                {
+                    e.View = view;
+                    e.Projection = projection;
+                    e.World = rotation * transforms[mesh.ParentBone.Index] * Matrix.CreateTranslation(Position);
+                }
+
+                mesh.Draw();
+            }
+
+            graphics.GraphicsDevice.SamplerStates[0] = oldState;
         }
 
         public Vector3 Position
@@ -241,6 +302,12 @@ namespace Mortuum
             {
                 return dead;
             }
+        }
+
+        public float WeaponPosition
+        {
+            get;
+            set;
         }
     }
 }

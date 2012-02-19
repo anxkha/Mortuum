@@ -10,6 +10,9 @@ namespace Mortuum
 {
     class Archer
     {
+        private ContentManager content;
+        private GraphicsDeviceManager graphics;
+
         private int level;
         private int health;
 
@@ -17,6 +20,9 @@ namespace Mortuum
         private Vector3 direction;
 
         private bool dead;
+        private bool loaded;
+
+        private Model model;
 
         public Archer()
         {
@@ -24,8 +30,61 @@ namespace Mortuum
             direction = Vector3.Zero;
         }
 
-        public void Init(ContentManager content, GraphicsDeviceManager graphics)
+        public void Load(ContentManager content, GraphicsDeviceManager graphics)
         {
+            this.graphics = graphics;
+            this.content = content;
+
+            model = content.Load<Model>("archer");
+
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                foreach (BasicEffect effect in mesh.Effects)
+                {
+                    effect.EnableDefaultLighting();
+                    effect.PreferPerPixelLighting = true;
+                }
+            }
+
+            loaded = true;
+        }
+
+        public void Unload()
+        {
+            model = null;
+            loaded = false;
+        }
+
+        public void Update(float fElapsedTime)
+        {
+            if (!loaded) return;
+        }
+
+        public void Draw(Matrix view, Matrix projection)
+        {
+            if (!loaded) return;
+
+            Matrix[] transforms = new Matrix[model.Bones.Count];
+            model.CopyAbsoluteBoneTransformsTo(transforms);
+
+            var clampState = new SamplerState() { AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp };
+            var oldState = graphics.GraphicsDevice.SamplerStates[0];
+
+            graphics.GraphicsDevice.SamplerStates[0] = clampState;
+
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                foreach (BasicEffect e in mesh.Effects)
+                {
+                    e.View = view;
+                    e.Projection = projection;
+                    e.World = transforms[mesh.ParentBone.Index] * Matrix.CreateTranslation(Position);
+                }
+
+                mesh.Draw();
+            }
+
+            graphics.GraphicsDevice.SamplerStates[0] = oldState;
         }
 
         public int Level

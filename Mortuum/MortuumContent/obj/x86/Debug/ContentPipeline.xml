@@ -105,6 +105,66 @@
       <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\Verdana.xnb</Output>
       <Time>2012-02-12T20:41:55.9558785-08:00</Time>
     </Item>
+    <Item>
+      <Source>archer.x</Source>
+      <Name>archer</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\archer.xnb</Output>
+      <Time>2012-02-19T11:27:49.3203887-08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\archer_0.xml</Key>
+        <Value>2012-02-19T11:27:51.9528028-08:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>archer.x</Source>
+      <Importer>XImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\archer_0.xml</Output>
+      <Time>2012-02-19T11:27:49.3203887-08:00</Time>
+    </Item>
+    <Item>
+      <Source>guard.x</Source>
+      <Name>guard</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\guard.xnb</Output>
+      <Time>2012-02-19T11:27:49.3363863-08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\guard_0.xml</Key>
+        <Value>2012-02-19T11:27:52.0018008-08:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>guard.x</Source>
+      <Importer>XImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\guard_0.xml</Output>
+      <Time>2012-02-19T11:27:49.3363863-08:00</Time>
+    </Item>
+    <Item>
+      <Source>cruentus.x</Source>
+      <Name>cruentus</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <Options>None</Options>
+      <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\cruentus.xnb</Output>
+      <Time>2012-02-19T11:42:25.2563012-08:00</Time>
+      <Dependency>
+        <Key>obj\x86\Debug\cruentus_0.xml</Key>
+        <Value>2012-02-19T11:42:26.2232639-08:00</Value>
+      </Dependency>
+    </Item>
+    <Item>
+      <Source>cruentus.x</Source>
+      <Importer>XImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>obj\x86\Debug\cruentus_0.xml</Output>
+      <Time>2012-02-19T11:42:25.2563012-08:00</Time>
+    </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
       <TargetPlatform>Windows</TargetPlatform>

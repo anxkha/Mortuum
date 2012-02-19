@@ -10,6 +10,8 @@ namespace Mortuum
     {
         Level level;
         Weapon weapon;
+        Archer archer;
+        Guard guard;
 
         TextBox txtbox;
         Canvas menuCanvas;
@@ -25,14 +27,13 @@ namespace Mortuum
             level = new Level();
             level.Load(1, content, graphics);
 
-            weapon = new Weapon() { Type = WeaponType.Sword, Position = new Vector3(0.0f, 4.0f, 1.0f) };
+            weapon = new Weapon() { Type = WeaponType.Sword, Position = new Vector3(0.0f, 0.5f, 0.0f), Direction = 0.0f };
             weapon.Load(content, graphics);
 
             menuCanvas = new Canvas();
-
             menuCanvas.IsActive = true;
-            menuCanvas.Position = new Vector2(((graphics.GraphicsDevice.Viewport.Width / 2) - 200), ((graphics.GraphicsDevice.Viewport.Height / 2) - 250));
             menuCanvas.Size = new Vector2(400, 500);
+            menuCanvas.Position = new Vector2(((graphics.GraphicsDevice.Viewport.Width / 2) - (menuCanvas.Size.X / 2)), ((graphics.GraphicsDevice.Viewport.Height / 2) - (menuCanvas.Size.Y / 2)));
             menuCanvas.Hidden = true;
             menuCanvas.Load(content, graphics);
 
@@ -43,6 +44,14 @@ namespace Mortuum
             txtbox.Load(content, graphics);
 
             menuCanvas.AddChild(txtbox);
+
+            archer = new Archer() { Position = new Vector3(1.0f, 0.3f, 1.0f) };
+            archer.Load(content, graphics);
+
+            guard = new Guard() { Position = new Vector3(-1.0f, 0.3f, 1.0f) };
+            guard.Load(content, graphics);
+
+            player.Position = new Vector3(0.0f, 0.35f, 0.0f);
 
             return true;
         }
@@ -73,8 +82,39 @@ namespace Mortuum
 
             Camera.LookAt(new Vector3(0.0f, 5.0f, -0.1f), new Vector3(0.0f, 0.0f, 0.0f));
 
-            weapon.Update(elapsedTime);
+            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            {
+                var tempDir = player.Direction;
 
+                tempDir.Z += Settings.PlayerTurnSpeed * elapsedTime;
+
+                player.Direction = tempDir;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            {
+                var tempDir = player.Direction;
+
+                tempDir.Z -= Settings.PlayerTurnSpeed * elapsedTime;
+
+                player.Direction = tempDir;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Q))
+                player.WeaponPosition = player.WeaponPosition + (Settings.PlayerWeaponSwingSpeed * elapsedTime);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.E))
+                player.WeaponPosition = player.WeaponPosition - (Settings.PlayerWeaponSwingSpeed * elapsedTime);
+
+            if (player.WeaponPosition < -90.0f) player.WeaponPosition = -90.0f;
+            if (player.WeaponPosition > 90.0f) player.WeaponPosition = 90.0f;
+
+            weapon.Direction = -player.Direction.Z - player.WeaponPosition;
+
+            weapon.Update(elapsedTime);
+            archer.Update(elapsedTime);
+            guard.Update(elapsedTime);
+            player.Update(elapsedTime);
             menuCanvas.Update(elapsedTime);
 
             return GameState.TitleScreen;
@@ -84,8 +124,6 @@ namespace Mortuum
         {
             var state = new DepthStencilState();
 
-            
-
             state.DepthBufferEnable = true;
 
             graphics.GraphicsDevice.DepthStencilState = state;
@@ -93,6 +131,9 @@ namespace Mortuum
 
             level.Draw(Camera.View, Camera.Projection);
             weapon.Draw(Camera.View, Camera.Projection);
+            archer.Draw(Camera.View, Camera.Projection);
+            guard.Draw(Camera.View, Camera.Projection);
+            player.Draw(Camera.View, Camera.Projection);
 
             menuCanvas.Draw();
         }

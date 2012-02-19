@@ -44,6 +44,9 @@ namespace Mortuum
         public const float PlayerDyingDuration = 6.0f;
         public const float PlayerHealthRegenDuration = 6.0f;
         public const float PlayerShieldRegenDuration = 3.0f;
+        public const float PlayerMoveSpeed = 1.0f;          // In meters per second.
+        public const float PlayerTurnSpeed = 200.0f;        // In degrees.
+        public const float PlayerWeaponSwingSpeed = 180.0f; // In degrees.
 
         // Graphics values.
         public const bool SyncWithVTrace = false;

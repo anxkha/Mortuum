@@ -26,10 +26,17 @@ namespace Mortuum
         private bool loaded;
 
         private Model model;
+        private Matrix rotation;
 
         public Weapon()
         {
             type = WeaponType.Sword;
+
+            Position = Vector3.Zero;
+            Direction = 0.0f;
+
+            rotation = Matrix.Identity;
+
             model = null;
             loaded = false;
         }
@@ -63,11 +70,14 @@ namespace Mortuum
         public void Unload()
         {
             model = null;
+            loaded = false;
         }
 
         public void Update(float elapsedTime)
         {
             if (!loaded) return;
+
+            rotation = Matrix.CreateRotationZ(0.0f) * Matrix.CreateRotationY(MathHelper.ToRadians(Direction)) * Matrix.CreateRotationX(MathHelper.ToRadians(90.0f));
         }
 
         public void Draw(Matrix view, Matrix projection)
@@ -79,16 +89,19 @@ namespace Mortuum
 
             graphics.GraphicsDevice.SamplerStates[0] = clampState;
 
+            var transforms = new Matrix[model.Bones.Count];
+            model.CopyAbsoluteBoneTransformsTo(transforms);
+
             foreach (ModelMesh mesh in model.Meshes)
             {
                 foreach (BasicEffect e in mesh.Effects)
                 {
                     e.View = view;
                     e.Projection = projection;
-                    e.World = Matrix.CreateTranslation(Position);
-
-                    mesh.Draw();
+                    e.World = rotation * transforms[mesh.ParentBone.Index] * Matrix.CreateTranslation(Position);
                 }
+
+                mesh.Draw();
             }
 
             graphics.GraphicsDevice.SamplerStates[0] = oldState;
@@ -100,7 +113,7 @@ namespace Mortuum
             set;
         }
 
-        public Vector3 Direction
+        public float Direction
         {
             get;
             set;

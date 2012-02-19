@@ -76,7 +76,7 @@ namespace Mortuum
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             player = new Player();
-            player.Init(Content, graphics);
+            player.Load(Content, graphics);
 
             titleScreen = new TitleScreen();
             titleScreen.Load(Content, graphics, player);
