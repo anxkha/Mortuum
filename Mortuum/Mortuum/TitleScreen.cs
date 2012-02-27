@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -80,25 +81,20 @@ namespace Mortuum
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 return GameState.Exit;
 
-            Camera.LookAt(new Vector3(0.0f, 5.0f, -0.1f), new Vector3(0.0f, 0.0f, 0.0f));
+            Camera.LookAt(new Vector3(0.0f, 10.0f, -0.1f), new Vector3(0.0f, 0.0f, 0.0f));
 
+            // Handle player input.
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
-            {
-                var tempDir = player.Direction;
-
-                tempDir.Z += Settings.PlayerTurnSpeed * elapsedTime;
-
-                player.Direction = tempDir;
-            }
+                player.Direction = player.Direction + Settings.PlayerTurnSpeed * elapsedTime;
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
-            {
-                var tempDir = player.Direction;
+                player.Direction = player.Direction - Settings.PlayerTurnSpeed * elapsedTime;
 
-                tempDir.Z -= Settings.PlayerTurnSpeed * elapsedTime;
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                player.Move(true, elapsedTime);
 
-                player.Direction = tempDir;
-            }
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                player.Move(false, elapsedTime);
 
             if (Keyboard.GetState().IsKeyDown(Keys.Q))
                 player.WeaponPosition = player.WeaponPosition + (Settings.PlayerWeaponSwingSpeed * elapsedTime);
@@ -106,11 +102,14 @@ namespace Mortuum
             if (Keyboard.GetState().IsKeyDown(Keys.E))
                 player.WeaponPosition = player.WeaponPosition - (Settings.PlayerWeaponSwingSpeed * elapsedTime);
 
+            // Adjust weapon position and direction.
             if (player.WeaponPosition < -90.0f) player.WeaponPosition = -90.0f;
             if (player.WeaponPosition > 90.0f) player.WeaponPosition = 90.0f;
 
-            weapon.Direction = -player.Direction.Z - player.WeaponPosition;
+            weapon.Direction = player.Direction + player.WeaponPosition;
+            weapon.Position = player.Position;
 
+            // Update all the entities.
             weapon.Update(elapsedTime);
             archer.Update(elapsedTime);
             guard.Update(elapsedTime);
@@ -127,7 +126,7 @@ namespace Mortuum
             state.DepthBufferEnable = true;
 
             graphics.GraphicsDevice.DepthStencilState = state;
-            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullNone;
+            graphics.GraphicsDevice.RasterizerState = RasterizerState.CullCounterClockwise;
 
             level.Draw(Camera.View, Camera.Projection);
             weapon.Draw(Camera.View, Camera.Projection);

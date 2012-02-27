@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -176,12 +172,12 @@ namespace Mortuum
 
             // Power circle.
 
-            vertices[j++] = new VertexPositionNormalTexture(new Vector3(0.5f, 0.0f, 0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(0.0f, 0.0f));
-            vertices[j++] = new VertexPositionNormalTexture(new Vector3(-0.5f, 0.0f, 0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(1.0f, 0.0f));
-            vertices[j++] = new VertexPositionNormalTexture(new Vector3(0.5f, 0.0f, -0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(0.0f, 1.0f));
-            vertices[j++] = new VertexPositionNormalTexture(new Vector3(0.5f, 0.0f, -0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(0.0f, 1.0f));
-            vertices[j++] = new VertexPositionNormalTexture(new Vector3(-0.5f, 0.0f, 0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(1.0f, 0.0f));
-            vertices[j++] = new VertexPositionNormalTexture(new Vector3(-0.5f, 0.0f, -0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(1.0f, 1.0f));
+            vertices[j++] = new VertexPositionNormalTexture(new Vector3(0.5f, 0.01f, 0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(0.0f, 0.0f));
+            vertices[j++] = new VertexPositionNormalTexture(new Vector3(-0.5f, 0.01f, 0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(1.0f, 0.0f));
+            vertices[j++] = new VertexPositionNormalTexture(new Vector3(0.5f, 0.01f, -0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(0.0f, 1.0f));
+            vertices[j++] = new VertexPositionNormalTexture(new Vector3(0.5f, 0.01f, -0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(0.0f, 1.0f));
+            vertices[j++] = new VertexPositionNormalTexture(new Vector3(-0.5f, 0.01f, 0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(1.0f, 0.0f));
+            vertices[j++] = new VertexPositionNormalTexture(new Vector3(-0.5f, 0.01f, -0.5f), new Vector3(0.0f, 1.0f, 0.0f), new Vector2(1.0f, 1.0f));
 
             vBuffer.SetData<VertexPositionNormalTexture>(vertices);
 

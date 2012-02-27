@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 namespace Mortuum
 {
@@ -44,15 +40,15 @@ namespace Mortuum
         public const float PlayerDyingDuration = 6.0f;
         public const float PlayerHealthRegenDuration = 6.0f;
         public const float PlayerShieldRegenDuration = 3.0f;
-        public const float PlayerMoveSpeed = 1.0f;          // In meters per second.
+        public const float PlayerMoveSpeed = 2.0f;          // In meters per second.
         public const float PlayerTurnSpeed = 200.0f;        // In degrees.
-        public const float PlayerWeaponSwingSpeed = 180.0f; // In degrees.
+        public const float PlayerWeaponSwingSpeed = 200.0f; // In degrees.
 
         // Graphics values.
-        public const bool SyncWithVTrace = false;
-        public const bool FixedTimeStep = false;
-        public const int GraphicsWidth = 1440;
-        public const int GraphicsHeight = 900;
+        public const bool SyncWithVTrace = true;
+        public const bool FixedTimeStep = true;
+        public const int GraphicsWidth = 1024;
+        public const int GraphicsHeight = 768;
         public const bool GraphicsFullScreen = false;
         public const SurfaceFormat GraphicsFormat = SurfaceFormat.Bgra5551;
 

@@ -152,10 +152,10 @@
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
       <Output>E:\Backup\Lucas\Projects\Mortuum\Mortuum\Mortuum\bin\x86\Debug\Content\cruentus.xnb</Output>
-      <Time>2012-02-19T11:42:25.2563012-08:00</Time>
+      <Time>2012-02-26T22:07:22.2376813-08:00</Time>
       <Dependency>
         <Key>obj\x86\Debug\cruentus_0.xml</Key>
-        <Value>2012-02-19T11:42:26.2232639-08:00</Value>
+        <Value>2012-02-26T22:07:24.0626139-08:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -163,7 +163,7 @@
       <Importer>XImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>obj\x86\Debug\cruentus_0.xml</Output>
-      <Time>2012-02-19T11:42:25.2563012-08:00</Time>
+      <Time>2012-02-26T22:07:22.2376813-08:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>

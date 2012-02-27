@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -35,7 +32,6 @@ namespace Mortuum
         private float shieldTick;
 
         private Vector3 position;
-        private Vector3 direction;
 
         private Matrix rotation;
         private Model model;
@@ -61,8 +57,8 @@ namespace Mortuum
             dyingTick = 0.0f;
             loaded = false;
 
-            position = Vector3.Zero;
-            direction = Vector3.Zero;
+            Position = Vector3.Zero;
+            Direction = 0.0f;
 
             healthTick = 0.0f;
             shieldTick = 0.0f;
@@ -152,16 +148,14 @@ namespace Mortuum
                 }
             }
 
-            rotation = Matrix.CreateRotationZ(MathHelper.ToRadians(Direction.Z));
-            rotation *= Matrix.CreateRotationY(MathHelper.ToRadians(Direction.Y));
-            rotation *= Matrix.CreateRotationX(MathHelper.ToRadians(Direction.X));
+            rotation = Matrix.CreateRotationX(0.0f) * Matrix.CreateRotationY(MathHelper.ToRadians(Direction)) * Matrix.CreateRotationZ(0.0f);
         }
 
         public void Draw(Matrix view, Matrix projection)
         {
             if (!loaded) return;
 
-            Matrix[] transforms = new Matrix[model.Bones.Count];
+            var transforms = new Matrix[model.Bones.Count];
             model.CopyAbsoluteBoneTransformsTo(transforms);
 
             var clampState = new SamplerState() { AddressU = TextureAddressMode.Clamp, AddressV = TextureAddressMode.Clamp };
@@ -175,13 +169,30 @@ namespace Mortuum
                 {
                     e.View = view;
                     e.Projection = projection;
-                    e.World = rotation * transforms[mesh.ParentBone.Index] * Matrix.CreateTranslation(Position);
+                    e.World = transforms[mesh.ParentBone.Index] * rotation * Matrix.CreateTranslation(Position);
                 }
 
                 mesh.Draw();
             }
 
             graphics.GraphicsDevice.SamplerStates[0] = oldState;
+        }
+
+        public void Move(bool forward, float fElapsedTime)
+        {
+            var tempx = Math.Sin(MathHelper.ToRadians(Direction)) * Settings.PlayerMoveSpeed * fElapsedTime;
+            var tempz = Math.Cos(MathHelper.ToRadians(Direction)) * Settings.PlayerMoveSpeed * fElapsedTime;
+
+            if (forward)
+            {
+                position.X += (float)tempx;
+                position.Z += (float)tempz;
+            }
+            else
+            {
+                position.X -= (float)tempx;
+                position.Z -= (float)tempz;
+            }
         }
 
         public Vector3 Position
@@ -197,17 +208,10 @@ namespace Mortuum
             }
         }
 
-        public Vector3 Direction
+        public float Direction
         {
-            get
-            {
-                return direction;
-            }
-
-            set
-            {
-                direction = value;
-            }
+            get;
+            set;
         }
 
         public int Health

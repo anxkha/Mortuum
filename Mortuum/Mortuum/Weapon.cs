@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -77,7 +73,7 @@ namespace Mortuum
         {
             if (!loaded) return;
 
-            rotation = Matrix.CreateRotationZ(0.0f) * Matrix.CreateRotationY(MathHelper.ToRadians(Direction)) * Matrix.CreateRotationX(MathHelper.ToRadians(90.0f));
+            rotation = Matrix.CreateRotationX(MathHelper.ToRadians(90.0f)) * Matrix.CreateRotationY(MathHelper.ToRadians(Direction)) * Matrix.CreateRotationZ(0.0f);
         }
 
         public void Draw(Matrix view, Matrix projection)
@@ -98,7 +94,7 @@ namespace Mortuum
                 {
                     e.View = view;
                     e.Projection = projection;
-                    e.World = rotation * transforms[mesh.ParentBone.Index] * Matrix.CreateTranslation(Position);
+                    e.World = transforms[mesh.ParentBone.Index] * rotation * Matrix.CreateTranslation(Position);
                 }
 
                 mesh.Draw();
