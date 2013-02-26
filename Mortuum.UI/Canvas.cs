@@ -2,12 +2,20 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace Mortuum.Ui
 {
     public class Canvas : IElement
     {
+        private GraphicsDeviceManager _graphics;
+        private ContentManager _content;
+        private SpriteBatch _spriteBatch;
+        private Texture2D _borderTex;
+        private Texture2D _backgroundTex;
+
+        private List<IElement> _children;
+        private bool _loaded;
+
         public bool Hidden
         {
             get;
@@ -52,45 +60,45 @@ namespace Mortuum.Ui
             Position = new Vector2(10, 10);
             Size = new Vector2(300, 200);
 
-            m_Children = new List<IElement>(1);
+            _children = new List<IElement>(1);
 
-            m_Loaded = false;
+            _loaded = false;
         }
 
         public bool Load(ContentManager content, GraphicsDeviceManager graphics)
         {
-            m_Content = content;
-            m_Graphics = graphics;
+            _content = content;
+            _graphics = graphics;
 
-            m_SpriteBatch = new SpriteBatch(graphics.GraphicsDevice);
+            _spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
 
-            m_BorderTex = new Texture2D(m_Graphics.GraphicsDevice, 1, 1, true, SurfaceFormat.Color);
-            m_BackgroundTex = new Texture2D(m_Graphics.GraphicsDevice, 1, 1, true, SurfaceFormat.Color);
+            _borderTex = new Texture2D(_graphics.GraphicsDevice, 1, 1, true, SurfaceFormat.Color);
+            _backgroundTex = new Texture2D(_graphics.GraphicsDevice, 1, 1, true, SurfaceFormat.Color);
 
-            m_BorderTex.SetData(new Color[] { new Color(1.0f, 1.0f, 1.0f) });
-            m_BackgroundTex.SetData(new Color[] { new Color(0.0f, 0.0f, 0.0f, 0.5f) });
+            _borderTex.SetData(new Color[] { new Color(1.0f, 1.0f, 1.0f) });
+            _backgroundTex.SetData(new Color[] { new Color(0.0f, 0.0f, 0.0f, 0.5f) });
 
-            m_Loaded = true;
+            _loaded = true;
 
             return true;
         }
 
         public void Unload()
         {
-            foreach (var e in m_Children)
+            foreach (var e in _children)
             {
                 e.Unload();
             }
 
-            m_SpriteBatch = null;
+            _spriteBatch = null;
         }
 
         public void Update(float fElapsedTime)
         {
-            if (!m_Loaded) return;
+            if (!_loaded) return;
             if (Hidden) return;
 
-            foreach (var e in m_Children)
+            foreach (var e in _children)
             {
                 e.Update(fElapsedTime);
             }
@@ -98,21 +106,21 @@ namespace Mortuum.Ui
 
         public void Draw()
         {
-            if (!m_Loaded) return;
+            if (!_loaded) return;
             if (Hidden) return;
 
-            m_SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);
+            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);
 
-            m_SpriteBatch.Draw(m_BackgroundTex, new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y), Color.White);
+            _spriteBatch.Draw(_backgroundTex, new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, (int)Size.Y), Color.White);
 
-            m_SpriteBatch.Draw(m_BorderTex, new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, 1), Color.White);
-            m_SpriteBatch.Draw(m_BorderTex, new Rectangle((int)Position.X, (int)Position.Y, 1, (int)Size.Y), Color.White);
-            m_SpriteBatch.Draw(m_BorderTex, new Rectangle((int)Position.X + (int)Size.X - 1, (int)Position.Y, 1, (int)Size.Y), Color.White);
-            m_SpriteBatch.Draw(m_BorderTex, new Rectangle((int)Position.X, (int)Position.Y + (int)Size.Y - 1, (int)Size.X, 1), Color.White);
+            _spriteBatch.Draw(_borderTex, new Rectangle((int)Position.X, (int)Position.Y, (int)Size.X, 1), Color.White);
+            _spriteBatch.Draw(_borderTex, new Rectangle((int)Position.X, (int)Position.Y, 1, (int)Size.Y), Color.White);
+            _spriteBatch.Draw(_borderTex, new Rectangle((int)Position.X + (int)Size.X - 1, (int)Position.Y, 1, (int)Size.Y), Color.White);
+            _spriteBatch.Draw(_borderTex, new Rectangle((int)Position.X, (int)Position.Y + (int)Size.Y - 1, (int)Size.X, 1), Color.White);
 
-            m_SpriteBatch.End();
+            _spriteBatch.End();
 
-            foreach (var e in m_Children)
+            foreach (var e in _children)
             {
                 e.Draw();
             }
@@ -122,19 +130,7 @@ namespace Mortuum.Ui
         {
             child.Parent = this;
 
-            m_Children.Add(child);
+            _children.Add(child);
         }
-
-        private GraphicsDeviceManager m_Graphics;
-        private ContentManager m_Content;
-
-        private SpriteBatch m_SpriteBatch;
-
-        private Texture2D m_BorderTex;
-        private Texture2D m_BackgroundTex;
-
-        private List<IElement> m_Children;
-
-        private bool m_Loaded;
     }
 }

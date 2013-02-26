@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Mortuum
+namespace Mortuum.Common
 {
-    public class Camera
+    internal class Camera
     {
         public static Matrix viewMatrix;
         public static Matrix projectionMatrix;
@@ -17,48 +17,32 @@ namespace Mortuum
 
         public static Vector3 Position
         {
-            get
-            {
-                return position;
-            }
-
+            get { return position; }
             set
             {
                 position = value;
-
                 RecalculateView();
             }
         }
 
         public static Vector3 Rotation
         {
-            get
-            {
-                return rotation;
-            }
-
+            get { return rotation; }
             set
             {
                 rotation = value;
-
                 RecalculateView();
             }
         }
 
         public static Matrix View
         {
-            get
-            {
-                return viewMatrix;
-            }
+            get { return viewMatrix; }
         }
 
         public static Matrix Projection
         {
-            get
-            {
-                return projectionMatrix;
-            }
+            get { return projectionMatrix; }
         }
 
         private static void RecalculateView()

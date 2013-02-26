@@ -2,6 +2,10 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Mortuum.Common;
+using Mortuum.Enemy;
+using Mortuum.Spell;
+using Mortuum.Weapon;
 
 namespace Mortuum
 {
@@ -31,10 +35,80 @@ namespace Mortuum
         private float healthTick;
         private float shieldTick;
 
-        private Vector3 position;
-
         private Matrix rotation;
         private Model model;
+
+        public Vector3 Position
+        {
+            get;
+            set;
+        }
+
+        public float Direction
+        {
+            get;
+            set;
+        }
+
+        public int Health
+        {
+            get { return health; }
+            set
+            {
+                health = value;
+
+                if (health <= 0)
+                {
+                    dying = true;
+                    health = 0;
+                }
+            }
+        }
+
+        public int Strength
+        {
+            get;
+            set;
+        }
+
+        public int Shield
+        {
+            get;
+            set;
+        }
+
+        public int Magic
+        {
+            get { return magic; }
+            set
+            {
+                magic = value;
+                if (magic < 0) magic = 0;
+            }
+        }
+
+        public int Score
+        {
+            get;
+            set;
+        }
+
+        public int Kills
+        {
+            get;
+            set;
+        }
+
+        public bool Dead
+        {
+            get { return dead; }
+        }
+
+        public float WeaponPosition
+        {
+            get;
+            set;
+        }
 
         public Player()
         {
@@ -116,11 +190,8 @@ namespace Mortuum
             if (dying)
             {
                 dyingTick += elapsedTime;
-
                 if (dyingTick >= Settings.PlayerDyingDuration)
-                {
                     dead = true;
-                }
             }
             else
             {
@@ -131,7 +202,7 @@ namespace Mortuum
                     if (healthTick >= Settings.PlayerHealthRegenDuration)
                     {
                         health++;
-                        Magic -= Soul.Magic;
+                        Magic -= Soul.MAGIC;
                         healthTick -= Settings.PlayerHealthRegenDuration;
                     }
                 }
@@ -183,6 +254,8 @@ namespace Mortuum
             var tempx = Math.Sin(MathHelper.ToRadians(Direction)) * Settings.PlayerMoveSpeed * fElapsedTime;
             var tempz = Math.Cos(MathHelper.ToRadians(Direction)) * Settings.PlayerMoveSpeed * fElapsedTime;
 
+            Vector3 position = Position;
+
             if (forward)
             {
                 position.X += (float)tempx;
@@ -193,125 +266,8 @@ namespace Mortuum
                 position.X -= (float)tempx;
                 position.Z -= (float)tempz;
             }
-        }
 
-        public Vector3 Position
-        {
-            get
-            {
-                return position;
-            }
-
-            set
-            {
-                position = value;
-            }
-        }
-
-        public float Direction
-        {
-            get;
-            set;
-        }
-
-        public int Health
-        {
-            get
-            {
-                return health;
-            }
-
-            set
-            {
-                health = value;
-
-                if (health <= 0)
-                {
-                    dying = true;
-                    health = 0;
-                }
-            }
-        }
-
-        public int Strength
-        {
-            get
-            {
-                return strength;
-            }
-
-            set
-            {
-                strength = Strength;
-            }
-        }
-
-        public int Shield
-        {
-            get
-            {
-                return shield;
-            }
-
-            set
-            {
-                shield = value;
-            }
-        }
-
-        public int Magic
-        {
-            get
-            {
-                return magic;
-            }
-
-            set
-            {
-                magic = value;
-
-                if (magic < 0) magic = 0;
-            }
-        }
-
-        public int Score
-        {
-            get
-            {
-                return score;
-            }
-
-            set
-            {
-                score = value;
-            }
-        }
-
-        public int Kills
-        {
-            get
-            {
-                return kills;
-            }
-
-            set
-            {
-                kills = value;
-            }
-        }
-
-        public bool Dead
-        {
-            get
-            {
-                return dead;
-            }
-        }
-
-        public float WeaponPosition
-        {
-            get;
-            set;
+            Position = position;
         }
     }
 }

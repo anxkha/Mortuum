@@ -1,12 +1,21 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Mortuum.Ui
 {
     public class TextBox : IElement
     {
+        private ContentManager _content;
+        private GraphicsDeviceManager _graphics;
+        private SpriteFont _font;
+        private SpriteBatch _spriteBatch;
+
+        private string _buffer;
+        private string _fontName;
+        private bool _loaded;
+
         public bool Hidden
         {
             get;
@@ -39,18 +48,18 @@ namespace Mortuum.Ui
 
         public int Length
         {
-            get { return m_Buffer.Length; }
+            get { return _buffer.Length; }
         }
 
         public string Font
         {
-            set { m_FontName = value; }
+            set { _fontName = value; }
         }
 
         public string Text
         {
-            get { return m_Buffer; }
-            set { m_Buffer = value; }
+            get { return _buffer; }
+            set { _buffer = value; }
         }
 
         public IElement Parent
@@ -79,12 +88,12 @@ namespace Mortuum.Ui
             Position = new Vector2(10, 10);
             Size = new Vector2(100, 22);
 
-            m_Buffer = "";
-            m_FontName = "";
+            _buffer = "";
+            _fontName = "";
 
-            m_Font = null;
+            _font = null;
 
-            m_Loaded = false;
+            _loaded = false;
 
             Parent = null;
         }
@@ -94,40 +103,40 @@ namespace Mortuum.Ui
             if (string.IsNullOrEmpty(Name))
                 throw new ArgumentNullException("Name", "The textbox control must have a name.");
 
-            if (string.IsNullOrEmpty(m_FontName))
+            if (string.IsNullOrEmpty(_fontName))
                 throw new ArgumentOutOfRangeException("Font", "A font must be specified to create a textbox");
 
-            m_Content = content;
-            m_Graphics = graphics;
+            _content = content;
+            _graphics = graphics;
 
-            m_Font = m_Content.Load<SpriteFont>(m_FontName);
+            _font = _content.Load<SpriteFont>(_fontName);
 
-            m_SpriteBatch = new SpriteBatch(graphics.GraphicsDevice);
+            _spriteBatch = new SpriteBatch(graphics.GraphicsDevice);
 
-            m_Loaded = true;
+            _loaded = true;
 
             return true;
         }
 
         public void Unload()
         {
-            m_Buffer = "";
-            m_FontName = "";
+            _buffer = "";
+            _fontName = "";
 
-            m_Font = null;
-            m_SpriteBatch = null;
+            _font = null;
+            _spriteBatch = null;
         }
 
         public void Update(float fElapsedTime)
         {
-            if (!m_Loaded) return;
+            if (!_loaded) return;
 
-            if (CursorPosition > m_Buffer.Length) CursorPosition = m_Buffer.Length;
+            if (CursorPosition > _buffer.Length) CursorPosition = _buffer.Length;
         }
 
         public void Draw()
         {
-            if (!m_Loaded) return;
+            if (!_loaded) return;
 
             var px = (int)Position.X;
             var py = (int)Position.Y;
@@ -140,35 +149,24 @@ namespace Mortuum.Ui
                 py += (int)Parent.Position.Y;
             }
 
-            Texture2D borderTex = new Texture2D(m_Graphics.GraphicsDevice, 1, 1, true, SurfaceFormat.Color);
-            Texture2D backgroundTex = new Texture2D(m_Graphics.GraphicsDevice, 1, 1, true, SurfaceFormat.Color);
+            Texture2D borderTex = new Texture2D(_graphics.GraphicsDevice, 1, 1, true, SurfaceFormat.Color);
+            Texture2D backgroundTex = new Texture2D(_graphics.GraphicsDevice, 1, 1, true, SurfaceFormat.Color);
 
             borderTex.SetData(new Color[] { new Color(1.0f, 1.0f, 1.0f) });
             backgroundTex.SetData(new Color[] { new Color(0.0f, 0.0f, 0.0f, 0.5f) });
 
-            m_SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);
+            _spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullCounterClockwise);
 
-            m_SpriteBatch.Draw(backgroundTex, new Rectangle(px, py, sx, sy), Color.White);
+            _spriteBatch.Draw(backgroundTex, new Rectangle(px, py, sx, sy), Color.White);
 
-            m_SpriteBatch.Draw(borderTex, new Rectangle(px, py, sx, 1), Color.White);
-            m_SpriteBatch.Draw(borderTex, new Rectangle(px, py, 1, sy), Color.White);
-            m_SpriteBatch.Draw(borderTex, new Rectangle(px + sx - 1, py, 1, sy), Color.White);
-            m_SpriteBatch.Draw(borderTex, new Rectangle(px, py + sy - 1, sx, 1), Color.White);
+            _spriteBatch.Draw(borderTex, new Rectangle(px, py, sx, 1), Color.White);
+            _spriteBatch.Draw(borderTex, new Rectangle(px, py, 1, sy), Color.White);
+            _spriteBatch.Draw(borderTex, new Rectangle(px + sx - 1, py, 1, sy), Color.White);
+            _spriteBatch.Draw(borderTex, new Rectangle(px, py + sy - 1, sx, 1), Color.White);
 
-            m_SpriteBatch.DrawString(m_Font, m_Buffer, new Vector2(px, py), Color.White);
+            _spriteBatch.DrawString(_font, _buffer, new Vector2(px, py), Color.White);
 
-            m_SpriteBatch.End();
+            _spriteBatch.End();
         }
-
-        private ContentManager m_Content;
-        private GraphicsDeviceManager m_Graphics;
-
-        private SpriteFont m_Font;
-        private SpriteBatch m_SpriteBatch;
-
-        private string m_Buffer;
-        private string m_FontName;
-
-        private bool m_Loaded;
     }
 }

@@ -1,10 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Mortuum.Common;
 
 namespace Mortuum
 {
-    class Level
+    internal class Level
     {
         protected VertexDeclaration vertexDecl;
         protected VertexBuffer vBuffer;

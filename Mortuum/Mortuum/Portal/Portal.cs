@@ -1,18 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 
-namespace Mortuum
+namespace Mortuum.Portal
 {
-    public enum PortalOrientation
-    {
-        Left = 1,
-        Right,
-        Top,
-        Bottom
-    }
-
-    class Portal
+    internal class Portal
     {
         private Vector3 position;
         private PortalOrientation side;
@@ -20,6 +11,24 @@ namespace Mortuum
         private float spawnTime;
         private float spawnTick;
         private bool trigger;
+
+        public Vector3 Position
+        {
+            get;
+            set;
+        }
+
+        public PortalOrientation Side
+        {
+            get;
+            set;
+        }
+
+        public float SpawnTime
+        {
+            get;
+            set;
+        }
 
         public Portal()
         {
@@ -48,45 +57,6 @@ namespace Mortuum
 
         public void Draw()
         {
-        }
-
-        public Vector3 Position
-        {
-            get
-            {
-                return position;
-            }
-
-            set
-            {
-                position = value;
-            }
-        }
-
-        public PortalOrientation Side
-        {
-            get
-            {
-                return side;
-            }
-
-            set
-            {
-                side = value;
-            }
-        }
-
-        public float SpawnTime
-        {
-            get
-            {
-                return spawnTime;
-            }
-
-            set
-            {
-                spawnTime = value;
-            }
         }
     }
 }

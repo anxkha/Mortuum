@@ -1,15 +1,15 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Mortuum.Common;
+using Mortuum.Enemy;
+using Mortuum.State;
+using Mortuum.Weapon;
 
 namespace Mortuum
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
-    public class Mortuum : Microsoft.Xna.Framework.Game
+    internal class Mortuum : Game
     {
-        GraphicsDeviceManager graphics;
+        private GraphicsDeviceManager _graphics;
         SpriteBatch spriteBatch;
 
         Player player;
@@ -25,7 +25,7 @@ namespace Mortuum
 
         public Mortuum()
         {
-            graphics = new GraphicsDeviceManager(this);
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 
@@ -37,21 +37,24 @@ namespace Mortuum
         /// </summary>
         protected override void Initialize()
         {
-            graphics.PreferredBackBufferWidth = Settings.GraphicsWidth;
-            graphics.PreferredBackBufferHeight = Settings.GraphicsHeight;
-            graphics.PreferredBackBufferFormat = Settings.GraphicsFormat;
-            graphics.IsFullScreen = Settings.GraphicsFullScreen;
-            graphics.PreferredDepthStencilFormat = DepthFormat.Depth24;
-            graphics.SynchronizeWithVerticalRetrace = Settings.SyncWithVTrace;
-            graphics.ApplyChanges();
+            _graphics.PreferredBackBufferWidth = Settings.GraphicsWidth;
+            _graphics.PreferredBackBufferHeight = Settings.GraphicsHeight;
+            _graphics.PreferredBackBufferFormat = Settings.GraphicsFormat;
+            _graphics.IsFullScreen = Settings.GraphicsFullScreen;
+            _graphics.PreferredDepthStencilFormat = DepthFormat.Depth24;
+            _graphics.SynchronizeWithVerticalRetrace = Settings.SyncWithVTrace;
+            _graphics.ApplyChanges();
 
             this.Window.Title = Settings.GameTitle;
             this.IsFixedTimeStep = Settings.FixedTimeStep;
 
-            Camera.Resize(45.0f, graphics.GraphicsDevice.Viewport.AspectRatio, 1.0f, 100.0f);
+            Camera.Resize(45.0f, _graphics.GraphicsDevice.Viewport.AspectRatio, 1.0f, 100.0f);
 
             Debug.Start("debug.log");
             Debug.Write("Mortuum starting.");
+
+            WeaponFactory.Initialize(Content, _graphics);
+            EnemyFactory.Initialize(Content, _graphics);
 
             FPS = 0;
             FPStime = 0;
@@ -59,35 +62,24 @@ namespace Mortuum
             base.Initialize();
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             player = new Player();
-            player.Load(Content, graphics);
+            player.Load(Content, _graphics);
 
             titleScreen = new TitleScreen();
-            titleScreen.Load(Content, graphics, player);
+            titleScreen.Load(Content, _graphics, player);
 
             gameScreen = new GameScreen();
-            gameScreen.Load(Content, graphics, player);
+            gameScreen.Load(Content, _graphics, player);
 
             currentGameState = GameState.TitleScreen;
             lastGameState = GameState.TitleScreen;
             nextGameState = GameState.TitleScreen;
-
-
         }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
         protected override void UnloadContent()
         {
             titleScreen.Unload();
@@ -96,11 +88,6 @@ namespace Mortuum
             Debug.Stop();
         }
 
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
             float elapsedTime = (float)(gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
@@ -128,10 +115,6 @@ namespace Mortuum
             base.Update(gameTime);
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             float elapsedTime = (float)(gameTime.ElapsedGameTime.TotalMilliseconds / 1000);

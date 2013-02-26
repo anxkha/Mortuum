@@ -1,11 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Mortuum.Common;
 
-namespace Mortuum
+namespace Mortuum.State
 {
-    class GameScreen : State
+    internal class GameScreen : State
     {
         private int currentLevel;
 
@@ -41,7 +41,6 @@ namespace Mortuum
                 return GameState.GameScreen;
             }
 
-            // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 return GameState.TitleScreen;
 

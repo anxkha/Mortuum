@@ -1,21 +1,23 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Mortuum.Common;
+using Mortuum.Enemy;
 using Mortuum.Ui;
+using Mortuum.Weapon;
 
-namespace Mortuum
+namespace Mortuum.State
 {
-    class TitleScreen : State
+    internal class TitleScreen : State
     {
-        Level level;
-        Weapon weapon;
-        Archer archer;
-        Guard guard;
+        private Level level;
+        private IWeapon weapon;
+        private IEnemy archer;
+        private IEnemy guard;
 
-        TextBox txtbox;
-        Canvas menuCanvas;
+        private TextBox txtbox;
+        private Canvas menuCanvas;
 
         public override bool Load(ContentManager content, GraphicsDeviceManager graphics, Player player)
         {
@@ -28,8 +30,9 @@ namespace Mortuum
             level = new Level();
             level.Load(1, content, graphics);
 
-            weapon = new Weapon() { Type = WeaponType.Sword, Position = new Vector3(0.0f, 0.5f, 0.0f), Direction = 0.0f };
-            weapon.Load(content, graphics);
+            weapon = WeaponFactory.Create(WeaponType.Sword);
+            weapon.SetPosition(new Vector3(0.0f, 0.5f, 0.0f));
+            weapon.SetDirection(0.0f);
 
             menuCanvas = new Canvas();
             menuCanvas.IsActive = true;
@@ -46,11 +49,11 @@ namespace Mortuum
 
             menuCanvas.AddChild(txtbox);
 
-            archer = new Archer() { Position = new Vector3(1.0f, 0.3f, 1.0f) };
-            archer.Load(content, graphics);
+            archer = EnemyFactory.Create(EnemyType.Archer, 1);
+            archer.SetPosition(new Vector3(1.0f, 0.3f, 1.0f));
 
-            guard = new Guard() { Position = new Vector3(-1.0f, 0.3f, 1.0f) };
-            guard.Load(content, graphics);
+            guard = EnemyFactory.Create(EnemyType.Guard, 1);
+            guard.SetPosition(new Vector3(-1.0f, 0.3f, 1.0f));
 
             player.Position = new Vector3(0.0f, 0.35f, 0.0f);
 
@@ -106,8 +109,8 @@ namespace Mortuum
             if (player.WeaponPosition < -90.0f) player.WeaponPosition = -90.0f;
             if (player.WeaponPosition > 90.0f) player.WeaponPosition = 90.0f;
 
-            weapon.Direction = player.Direction + player.WeaponPosition;
-            weapon.Position = player.Position;
+            weapon.SetDirection(player.Direction + player.WeaponPosition);
+            weapon.SetPosition(player.Position);
 
             // Update all the entities.
             weapon.Update(elapsedTime);

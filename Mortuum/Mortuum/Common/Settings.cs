@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace Mortuum
+namespace Mortuum.Common
 {
-    class Settings
+    internal class Settings
     {
         // Spell magic costs in magic points.
         public const int DragonBreathCost = 1;
