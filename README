@@ -1,9 +1,11 @@
 Mortuum
 
-Author: Lucas Suggs and Jason Kapalka
+Author: Lucas Suggs
+Original Concept: Jason Kapalka
 
 I give full credit to Jason Kapalka for the original concept and design of this
-game. He has granted his full blessing to port and update the game!
+game. He has granted his permission to reimplement the concept of the game to bring
+it up to date with modern technology.
 
 To compile this game you will need Microsoft Visual C# 2010 and Microsoft XNA
 Game Studio 4.0.
