@@ -1,27 +1,31 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Mortuum.Common;
-using Mortuum.Enemy;
-using Mortuum.State;
-using Mortuum.Weapon;
+using Mortuum.Enemies;
+using Mortuum.Levels;
+using Mortuum.Players;
+using Mortuum.Portals;
+using Mortuum.Spells;
+using Mortuum.States;
+using Mortuum.Weapons;
 
 namespace Mortuum
 {
     internal class Mortuum : Game
     {
         private GraphicsDeviceManager _graphics;
-        SpriteBatch spriteBatch;
+        private SpriteBatch _spriteBatch;
 
-        Player player;
-        GameScreen gameScreen;
-        TitleScreen titleScreen;
+        private Player _player;
+        private State _gameScreen;
+        private State _titleScreen;
 
-        GameState currentGameState;
-        GameState lastGameState;
-        GameState nextGameState;
+        private GameState _currentGameState;
+        private GameState _lastGameState;
+        private GameState _nextGameState;
 
-        float FPStime;
-        int FPS;
+        private float _fpsTime;
+        private int _fps;
 
         public Mortuum()
         {
@@ -29,13 +33,34 @@ namespace Mortuum
             Content.RootDirectory = "Content";
         }
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
+        /// <remarks>
+        /// Load non-graphics content here.
+        /// Calling base.Initialize will enumerate through any components and initialize them as well.
+        /// </remarks>
         protected override void Initialize()
+        {
+            InitializeWindow();
+            InitializeGraphics();
+            InitializeCamera();
+            InitializeProxies();
+            InitializeFactories();
+            
+            Debug.Start("debug.log");
+            Debug.Write("Mortuum starting.");
+
+            _fps = 0;
+            _fpsTime = 0;
+
+            base.Initialize();
+        }
+
+        private void InitializeWindow()
+        {
+            Window.Title = Settings.GameTitle;
+            IsFixedTimeStep = Settings.FixedTimeStep;
+        }
+
+        private void InitializeGraphics()
         {
             _graphics.PreferredBackBufferWidth = Settings.GraphicsWidth;
             _graphics.PreferredBackBufferHeight = Settings.GraphicsHeight;
@@ -44,45 +69,44 @@ namespace Mortuum
             _graphics.PreferredDepthStencilFormat = DepthFormat.Depth24;
             _graphics.SynchronizeWithVerticalRetrace = Settings.SyncWithVTrace;
             _graphics.ApplyChanges();
+        }
 
-            this.Window.Title = Settings.GameTitle;
-            this.IsFixedTimeStep = Settings.FixedTimeStep;
-
+        private void InitializeCamera()
+        {
             Camera.Resize(45.0f, _graphics.GraphicsDevice.Viewport.AspectRatio, 1.0f, 100.0f);
+        }
 
-            Debug.Start("debug.log");
-            Debug.Write("Mortuum starting.");
+        private void InitializeProxies()
+        {
+            PlayerProxy.Initialize(Content, _graphics);
+        }
 
+        private void InitializeFactories()
+        {
             WeaponFactory.Initialize(Content, _graphics);
             EnemyFactory.Initialize(Content, _graphics);
-
-            FPS = 0;
-            FPStime = 0;
-
-            base.Initialize();
+            StateFactory.Initialize(Content, _graphics);
+            LevelFactory.Initialize(Content, _graphics);
+            PortalFactory.Initialize(Content, _graphics);
+            SpellFactory.Initialize(Content, _graphics);
         }
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            player = new Player();
-            player.Load(Content, _graphics);
+            _titleScreen = StateFactory.Create(GameState.TitleScreen);
+            _gameScreen = StateFactory.Create(GameState.GameScreen, 1);
 
-            titleScreen = new TitleScreen();
-            titleScreen.Load(Content, _graphics, player);
-
-            gameScreen = new GameScreen();
-            gameScreen.Load(Content, _graphics, player);
-
-            currentGameState = GameState.TitleScreen;
-            lastGameState = GameState.TitleScreen;
-            nextGameState = GameState.TitleScreen;
+            _currentGameState = GameState.TitleScreen;
+            _lastGameState = GameState.TitleScreen;
+            _nextGameState = GameState.TitleScreen;
         }
 
         protected override void UnloadContent()
         {
-            titleScreen.Unload();
+            _titleScreen.Unload();
+            _gameScreen.Unload();
 
             Debug.Write("Mortuum stopping.");
             Debug.Stop();
@@ -92,23 +116,23 @@ namespace Mortuum
         {
             float elapsedTime = (float)(gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
 
-            if (nextGameState != currentGameState)
+            if (_nextGameState != _currentGameState)
             {
-                if (GameState.Exit == nextGameState)
+                if (GameState.Exit == _nextGameState)
                     this.Exit();
 
-                lastGameState = currentGameState;
-                currentGameState = nextGameState;
+                _lastGameState = _currentGameState;
+                _currentGameState = _nextGameState;
             }
             
-            switch(currentGameState)
+            switch(_currentGameState)
             {
                 case GameState.TitleScreen:
-                    nextGameState = titleScreen.Update(elapsedTime);
+                    _nextGameState = _titleScreen.Update(elapsedTime);
                     break;
 
                 case GameState.GameScreen:
-                    nextGameState = gameScreen.Update(elapsedTime);
+                    _nextGameState = _gameScreen.Update(elapsedTime);
                     break;
             }
 
@@ -119,24 +143,24 @@ namespace Mortuum
         {
             float elapsedTime = (float)(gameTime.ElapsedGameTime.TotalMilliseconds / 1000);
 
-            FPS = (int)(1.0f / elapsedTime);
+            _fps = (int)(1.0f / elapsedTime);
 
             GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Black, 1.0f, 0);
 
-            if (FPStime > 1.0f)
+            if (_fpsTime > 1.0f)
             {
-                FPStime -= 1.0f;
-                FPS = 0;
+                _fpsTime -= 1.0f;
+                _fps = 0;
             }
 
-            switch (currentGameState)
+            switch (_currentGameState)
             {
                 case GameState.TitleScreen:
-                    titleScreen.Draw();
+                    _titleScreen.Draw();
                     break;
 
                 case GameState.GameScreen:
-                    gameScreen.Draw();
+                    _gameScreen.Draw();
                     break;
             }
 
